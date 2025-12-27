@@ -1,0 +1,34 @@
+{
+  "experiment_params": {
+    "experiment_name": "Compare+Pain Agent no pain",
+    "num_experiments": 5,
+    "num_steps_per_experiment": 5000,
+    "random_seed": 42
+  },
+  "environment_class": "src.reinforcement_learning.environments.grid_world.GridWorld",
+  "environment_params": {
+    "size": 7,
+    "possible_starting_positions": [[0, 6], [1, 6], [0, 5], [1, 5]],
+    "possible_initial_food_positions": [[5, 0], [6, 0], [5, 1], [6, 1]],
+    "obstacle_positions": [[3, 2], [3, 3], [3, 4], [2, 3], [4, 3], [3,0], [3, 6]],
+    "lifetime_learning" : true,
+    "stationary": true,
+    "food_location_change_steps": 1250
+  },
+  "agent_class": "src.reinforcement_learning.agents.binary_pain_q_learning_agent.BinaryPainQLearningAgent",
+  "agent_params": {
+    "w1": 0,
+    "w2": 0,
+    "w3": 0.5,
+    "w4": 0,
+    "pain_model": {
+      "transition_probabilities": [[0.3, 0.2], [0.7, 0.8]],
+      "emission_probabilities": [[0.4, 0.4], [0.6, 0.6]],
+      "prior_probabilities": [0.223, 0.777]
+    },
+    "aspiration_level": 0.05,
+    "alpha": 0.5,
+    "gamma": 0.99,
+    "epsilon": 0.1
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "experiment_params": {
+    "experiment_name": "example_experiment",
+    "num_experiments": 100,
+    "num_steps_per_experiment": 2500,
+    "random_seed": 42
+  },
+  "environment_class": "src.reinforcement_learning.environments.grid_world.GridWorld",
+  "environment_params": {
+    "size": 7,
+    "possible_starting_positions": [[0, 6], [1, 6], [0, 5], [1, 5]],
+    "possible_initial_food_positions": [[5, 0], [6, 0], [5, 1], [6, 1]],
+    "obstacle_positions": [[3, 2], [3, 3], [3, 4], [2, 3], [4, 3], [3,0], [3, 6]],
+    "lifetime_learning" : false,
+    "stationary": true,
+    "food_location_change_steps": 1250
+  },
+  "agent_class": "src.reinforcement_learning.agents.happy_q_learning_agent.HappyQLearningAgent",
+  "agent_params": {
+    "w1": 0,
+    "w2": 0,
+    "w3": 0.5,
+    "w4": 0.5,
+    "pain_model": {
+      "pain_states": [0, 0.25, 0.5, 0.75, 1],
+      "pain_probability": 0.01
+    },
+    "aspiration_level": 0.5,
+    "alpha": 0.1,
+    "gamma": 0.99,
+    "epsilon": 0.1
+  }
+}
