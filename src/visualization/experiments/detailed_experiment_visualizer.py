@@ -225,15 +225,14 @@ class DetailedExperimentVisualizer:
                 raise ValueError(f"Unknown metric '{m}'. Valid keys are: {list(metric_sources.keys())}")
 
 
-        height_per_subplot = 2.2  # inches per subplot (constant)
+        height_per_subplot = 2  # inches per subplot (constant)
         fig_height = height_per_subplot * len(metrics)
-        fig_width = 12
+        fig_width = 6.6
         fig, axes = plt.subplots(len(metrics), 1, figsize=(fig_width, fig_height), sharex=True)
         if len(metrics) == 1:
             axes = [axes]
 
-        fig.suptitle(title if title is not None else self.experiment_name,
-                     fontsize=title_font_size)
+        #fig.suptitle(title if title is not None else self.experiment_name, fontsize=title_font_size)
 
         agent_params = self.params["agent_params"]
         pain_model_transition = agent_params["pain_model"]["transition_probabilities"]
@@ -255,23 +254,38 @@ class DetailedExperimentVisualizer:
             f"Final cumulative objective reward: {mean_cum_obj_reward:.2f} ± {std_cum_obj_reward:.2f}"
         )
         description_text = "\n".join(description_lines)
-        fig.text(0.01, 0.92, description_text, ha='left', va='bottom', fontsize=caption_font_size)
+        #fig.text(0.01, 0.92, description_text, ha='left', va='bottom', fontsize=caption_font_size)
 
         for ax, metric_name in zip(axes, metrics):
             data = metric_sources[metric_name]()  # (num_trials, num_steps)
             mean = data.mean(axis=0)
             std = data.std(axis=0)
 
-            ax.plot(time, mean, label=f"Mean {"subjective reward" if metric_name == "Well-being" else metric_name.lower()}", color=plot_color)
+            ax.plot(time, mean, label="Mean", color=plot_color)
             ax.fill_between(time, mean - std, mean + std, color=plot_color, alpha=0.2,
                             label="± 1 SD")
 
             ax.set_ylabel(metric_name, fontsize=axis_labels_font_size)
             ax.tick_params(axis='both', labelsize=axis_labels_font_size)
-            ax.legend(loc="lower right", fontsize=label_font_size)
+            #ax.legend(loc="lower right", fontsize=label_font_size)
             ax.grid(True)
 
         axes[-1].set_xlabel("Time steps", fontsize=axis_labels_font_size)
+
+        handles, labels = axes[0].get_legend_handles_labels()
+
+        # Place it at the bottom outside the plots
+        fig.legend(
+            handles,
+            labels,
+            loc='outside upper right',  # Automatically places below the x-axis
+            #bbox_to_anchor=(0.5, -0.02),  # Fine-tune vertical position if needed
+            ncol=2,
+            #frameon=False,
+            fontsize=label_font_size
+        )
+
+        fig.align_ylabels(axes)
 
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         os.makedirs(self.save_dir, exist_ok=True)
